@@ -1,1 +1,9 @@
-{"name":"TriFuel — Triathlon Coach","short_name":"TriFuel","start_url":"./","display":"standalone","background_color":"#f4f7fb","theme_color":"#0b1220","icons":[]}
+{
+  "name": "TriFuel",
+  "short_name": "TriFuel",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f5f7fb",
+  "theme_color": "#0b1220",
+  "description": "Triathlon race nutrition and mobility app"
+}
