@@ -40,7 +40,7 @@ function renderSettings(){document.getElementById("settings").innerHTML=`<div cl
 function saveSettings(){["weight","swim","bike","run","temp","carb","sodium","fluid","breakfast"].forEach(k=>s[k]=Number(document.getElementById(k).value));s.raceDate=document.getElementById("raceDate").value;save();go("home")}
 function saveProducts(){["drink","drinkOz","drinkCarb","drinkSodium","gel","gelCarb","gelSodium"].forEach(k=>{let v=document.getElementById(k).value;s[k]=["drinkOz","drinkCarb","drinkSodium","gelCarb","gelSodium"].includes(k)?Number(v):v});save();go("nutrition")}
 function resetApp(){if(confirm("Reset TriFuel?")){localStorage.removeItem("trifuel");s={...D};renderAll()}}
-function render(id){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("hidden",e.id!==id));nav();const fn={home:renderHome,race:renderRace,nutrition:renderNutrition,mobility:renderMobility,settings:renderSettings}[id]||renderHome;fn()}
-function renderAll(){render(location.hash.slice(1)||"home")}addEventListener("hashchange",renderAll);renderAll();
+function render(id){document.querySelectorAll(".page").forEach(e=>e.classList.toggle("hidden",e.id!==id));nav();const fn={home:renderHome,race:renderRace,nutrition:renderNutrition,mobility:renderMob,settings:renderSettings}[id]||renderHome;fn()}
+function renderAll(){const id=location.hash.slice(1)||"home";render(["home","race","nutrition","mobility","settings"].includes(id)?id:"home")}addEventListener("hashchange",renderAll);renderAll();
 if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script></body></html>
