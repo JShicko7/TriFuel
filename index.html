@@ -22,12 +22,19 @@ window.addEventListener("error", function(e){
 .date-row{display:flex;gap:8px;align-items:center}
 .date-row input{flex:1;min-width:0}
 button,a.btn{cursor:pointer;-webkit-tap-highlight-color:transparent}
+</style><style>
+.nutrition-hero{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.nutrition-stat{padding:18px;border-radius:18px;background:linear-gradient(135deg,#f5f7fb,#e9eef7);border:1px solid #dfe5ee}
+.nutrition-stat small{display:block;opacity:.7}.nutrition-stat .big{font-size:30px;font-weight:800;margin:5px 0}
+.nutrition-card{padding:18px;border-radius:18px;background:#fff;border:1px solid #e6e8ed;box-shadow:0 4px 16px #0000000a}
+.nutrition-card h2{margin-top:0}.nutrition-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eceef2}
+.nutrition-row:last-child{border-bottom:0}@media(max-width:650px){.nutrition-hero{grid-template-columns:1fr}}
 </style></head><body><div class="app">
 <header class="hero"><h1>TriFuel</h1><p>Race fueling + mobility, built around your training.</p></header>
 <nav class="nav" id="nav"></nav><main class="wrap">
 <section id="home" class="page"></section><section id="race" class="page hidden"></section>
 <section id="nutrition" class="page hidden"></section><section id="mobility" class="page hidden"></section>
-<section id="settings" class="page hidden"></section><div class="footer">TriFuel v2.6 • Educational guidance only.</div>
+<section id="settings" class="page hidden"></section><div class="footer">TriFuel v2.7 • Educational guidance only.</div>
 </main></div>
 <script>
 const D={weight:157,swim:40,bike:90,run:60,temp:78,carb:70,sodium:600,fluid:22,breakfast:120,raceDate:"",
@@ -43,7 +50,24 @@ function renderRace(){let c=calc();document.getElementById("race").innerHTML=`<d
 ["Bike 1:05","Fuel","1 gel + drink."],["T2","Run setup","Water/sports drink as needed; don't force fluids."],
 ["Run 0:15","Gel","~25 g carbs + water."],["Run 0:40","Gel","~25 g carbs + water/sports drink."]
 ].map(x=>`<div class="event"><div class="time">${x[0]}</div><div class="eventbox"><strong>${x[1]}</strong>${x[2]}</div></div>`).join("")}<div class="note"><b>Approximate totals:</b> bike ${c.bc} g carbs, ${c.bn} mg sodium, ~${c.bf} oz fluid; run ${c.rc} g carbs and ${c.rn} mg sodium.</div></div>`}
-function renderNutrition(){let c=calc();document.getElementById("nutrition").innerHTML=`<div class="grid"><div class="card"><h2>Your targets</h2>${[["Carbs",s.carb+" g/hr"],["Sodium",s.sodium+" mg/hr"],["Fluid",s.fluid+" oz/hr"],["Bike total",c.bc+" g carbs"],["Run total",c.rc+" g carbs"]].map(x=>`<div class="metric"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")}</div><div class="card"><h2>Product labels</h2><div class="metric"><span>${s.drink}</span><b>${s.drinkCarb} g / ${s.drinkSodium} mg</b></div><div class="metric"><span>${s.gel}</span><b>${s.gelCarb} g / ${s.gelSodium} mg</b></div><div class="metric"><span>3 gels + 1 drink</span><b>${3*s.gelCarb+s.drinkCarb} g / ${3*s.gelSodium+s.drinkSodium} mg</b></div></div></div><div class="section card"><h2>Race packing</h2>${["Sports/electrolyte drink","3 bike gels","2 run gels","1 backup gel"].map(x=>`<div class="exercise"><span>${x}</span><input type="checkbox"></div>`).join("")}<p class="note">Enter exact label values in Settings. Sodium needs vary with sweat rate and conditions.</p></div>`}
+function renderNutrition(){
+const carb=Number(s.carb)||75,sodium=Number(s.sodium)||600,fluid=Number(s.fluid)||24,breakfast=Number(s.breakfast)||100;
+nutrition.innerHTML=`<div class="card"><h2>Race nutrition</h2><p class="muted">Your fueling targets at a glance.</p>
+<div class="nutrition-hero">
+<div class="nutrition-stat"><small>Carbohydrate</small><div class="big">${carb} g/hr</div><span>Bike + run target</span></div>
+<div class="nutrition-stat"><small>Sodium</small><div class="big">${sodium} mg/hr</div><span>Adjust for conditions</span></div>
+<div class="nutrition-stat"><small>Fluid</small><div class="big">${fluid} oz/hr</div><span>Drink consistently</span></div>
+<div class="nutrition-stat"><small>Breakfast</small><div class="big">${breakfast} g</div><span>Pre-race carbs</span></div></div></div>
+<div class="section grid">
+<div class="nutrition-card"><h2>🏊 Swim</h2><div class="nutrition-row"><span>Before</span><b>Carbs + fluids</b></div><div class="nutrition-row"><span>During</span><b>Usually no fueling</b></div><div class="nutrition-row"><span>After</span><b>Start bike fueling early</b></div></div>
+<div class="nutrition-card"><h2>🚴 Bike</h2><div class="nutrition-row"><span>Carbs</span><b>${carb} g/hr</b></div><div class="nutrition-row"><span>Sodium</span><b>${sodium} mg/hr</b></div><div class="nutrition-row"><span>Fluid</span><b>${fluid} oz/hr</b></div></div>
+<div class="nutrition-card"><h2>🏃 Run</h2><div class="nutrition-row"><span>Carbs</span><b>${carb} g/hr</b></div><div class="nutrition-row"><span>Fluid</span><b>${fluid} oz/hr</b></div><div class="nutrition-row"><span>Focus</span><b>Small, frequent doses</b></div></div></div>
+<div class="section nutrition-card"><h2>Race-day checklist</h2>
+<div class="nutrition-row"><span>Breakfast</span><b>${breakfast} g carbs</b></div>
+<div class="nutrition-row"><span>Bike</span><b>Carbs + sodium + fluid</b></div>
+<div class="nutrition-row"><span>Run</span><b>Gel/drink every 20–30 min</b></div>
+<div class="nutrition-row"><span>Transition</span><b>Fuel immediately on bike</b></div></div>`;
+}
 const plans={
 swim:{
   name:"Swimming",
@@ -145,14 +169,14 @@ function renderMob(){
   mobility.innerHTML=`<div class="card"><h2>Stretching & mobility</h2><p class="muted">Choose the discipline, then choose a dynamic warm-up or static recovery plan.</p>
   <div class="row">${Object.entries(plans).map(([key,v])=>`<button class="btn ${key==d?"":"secondary"}" onclick="selectDiscipline('${key}')">${v.name}</button>`).join("")}</div>
   <div class="section note"><b>${plan.name} focus:</b> ${plan.focus}</div>
+<div class="section card"><h2>${plan.name} routine</h2><p class="muted">Simple checklist for before and after training.</p>
+<div class="exercise"><span><b>Dynamic — before</b><small>${plan.dynamic.map(x=>x[1]).join(" • ")}</small></span></div>
+<div class="exercise"><span><b>Static — after</b><small>${plan.stat.map(x=>x[1]).join(" • ")}</small></span></div></div>
   <div class="section grid"><div class="card"><span class="pill">Before training</span><h2>Dynamic</h2><p class="muted">Movement-based preparation.</p><button type="button" class="btn" onclick="startMob('${d}','dynamic')">Start dynamic</button></div>
   <div class="card"><span class="pill">After training</span><h2>Static</h2><p class="muted">Relaxed post-training holds.</p><button type="button" class="btn" onclick="startMob('${d}','static')">Start static</button></div></div>
   <div class="section"><div class="metric"><b>Swim</b><span>Shoulders • thoracic • lats • hips</span></div><div class="metric"><b>Bike</b><span>Hips • quads • glutes • posture</span></div><div class="metric"><b>Run</b><span>Calves • ankles • legs • hips</span></div></div>
   </div>
-  <div class="section card"><h2>Movement library</h2>
-  <p class="muted">Tap any movement to watch a demonstration. Videos open in a new tab.</p>
-  <div class="grid3">${[...new Set(Object.values(plans).flatMap(v=>[...v.dynamic,...v.stat].map(x=>x[1])))].map(n=>`<div class="card"><b>${n}</b><div class="row" style="margin-top:8px">${exampleButton(n)}</div></div>`).join("")}</div>
-  </div><div class="note">Stop any movement that causes sharp, electric, radiating, or worsening pain.</div>`;
+</div><div class="note">Stop any movement that causes sharp, electric, radiating, or worsening pain.</div>`;
 }
 function selectDiscipline(d){ms.discipline=d;renderMob()}
 function videoUrl(name){
