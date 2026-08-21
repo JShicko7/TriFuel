@@ -34,7 +34,7 @@ button,a.btn{cursor:pointer;-webkit-tap-highlight-color:transparent}
 <nav class="nav" id="nav"></nav><main class="wrap">
 <section id="home" class="page"></section><section id="race" class="page hidden"></section>
 <section id="nutrition" class="page hidden"></section><section id="mobility" class="page hidden"></section>
-<section id="settings" class="page hidden"></section><div class="footer">TriFuel v2.7 • Educational guidance only.</div>
+<section id="settings" class="page hidden"></section><div class="footer">TriFuel v2.8 • Educational guidance only.</div>
 </main></div>
 <script>
 const D={weight:157,swim:40,bike:90,run:60,temp:78,carb:70,sodium:600,fluid:22,breakfast:120,raceDate:"",
@@ -44,7 +44,7 @@ function go(x){location.hash=x}function nav(){let a=location.hash.slice(1)||"hom
 function calc(){return{bc:Math.round(s.carb*s.bike/60),bn:Math.round(s.sodium*s.bike/60),bf:Math.round(s.fluid*s.bike/60),rc:Math.round(s.carb*s.run/60),rn:Math.round(s.sodium*s.run/60)}}
 function renderHome(){let c=calc(),d=s.raceDate?Math.max(0,Math.ceil((new Date(s.raceDate+"T12:00:00")-new Date())/86400000)):null;document.getElementById("home").innerHTML=`<div class="grid"><div class="card"><span class="pill">Athlete</span><div class="big">${s.weight} lb</div><div class="muted">Race fueling profile</div></div><div class="card"><span class="pill">Countdown</span><div class="big">${d===null?"—":d+" days"}</div><div class="muted">${s.raceDate||"Set race date in Settings"}</div></div></div><div class="section grid3"><div class="card"><b>Bike</b><div class="big">${c.bc} g</div><div class="muted">carbs • ${c.bn} mg sodium</div></div><div class="card"><b>Run</b><div class="big">${c.rc} g</div><div class="muted">carbs • ${c.rn} mg sodium</div></div><div class="card"><b>Fluid</b><div class="big">${s.fluid}</div><div class="muted">oz/hour</div></div></div><div class="section card"><h2>Quick start</h2><div class="row"><button type="button" class="btn" onclick="go('race')">Race-day plan</button><button type="button" class="btn secondary" onclick="startMob('bike','dynamic')">Bike warm-up</button><button type="button" class="btn secondary" onclick="go('mobility')">Mobility plans</button></div></div><div class="section card"><h2>Focus of v2</h2><p class="muted">Nutrition, hydration, sodium, race-day timing, and mobility. Training plans and workouts are intentionally excluded because you already use a separate training app.</p></div>`}
 function renderRace(){let c=calc();document.getElementById("race").innerHTML=`<div class="card"><span class="pill">Olympic triathlon</span><h2>Race-day fueling timeline</h2>${[
-["T−3:00","Breakfast",`~${s.breakfast} g carbs. Bagel + banana + honey/jam + electrolyte drink.`],
+["T−3:00","Breakfast",`~${s.breakfast} g carbs. Bagel + banana + honey/jam + electrolyte drink (500–1000 mg sodium).`],
 ["T−0:20","Pre-swim","1 gel (~25 g carbs) + water."],["Swim",`${s.swim} min`,"No fueling required."],
 ["Bike 0:15","Start fueling","Begin drink + 1 gel."],["Bike 0:40","Fuel",`1 gel + drink. Target ~${s.carb} g carbs/hr and ~${s.sodium} mg sodium/hr.`],
 ["Bike 1:05","Fuel","1 gel + drink."],["T2","Run setup","Water/sports drink as needed; don't force fluids."],
