@@ -29,7 +29,26 @@ button,a.btn{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .nutrition-card{padding:18px;border-radius:18px;background:#fff;border:1px solid #e6e8ed;box-shadow:0 4px 16px #0000000a}
 .nutrition-card h2{margin-top:0}.nutrition-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eceef2}
 .nutrition-row:last-child{border-bottom:0}@media(max-width:650px){.nutrition-hero{grid-template-columns:1fr}}
-</style></head><body><div class="app">
+</style>
+<style>
+:root{--navy:#0b1730;--blue:#2457d6;--ink:#101828;--muted:#667085;--line:#e4e7ec;--bg:#f5f7fb}
+body{background:var(--bg)!important;color:var(--ink)}
+.card{border:1px solid var(--line)!important;box-shadow:0 8px 28px rgba(16,24,40,.055)!important;border-radius:20px!important}
+.home-dashboard{padding-top:2px}.home-top{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+.home-card{position:relative;overflow:hidden;min-height:164px;padding:22px!important}
+.athlete-card{background:linear-gradient(145deg,#fff,#f7f9fd)}.race-card{background:linear-gradient(135deg,var(--navy),#17356f);color:#fff!important;border:0!important}
+.home-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#667085}.race-card .home-label{color:#bcd0ff}
+.home-icon{position:absolute;right:18px;top:18px;width:40px;height:40px;border-radius:12px;background:#edf3ff;display:grid;place-items:center;font-size:19px}.race-card .home-icon{background:#ffffff1f}
+.home-number{font-size:42px;line-height:1;font-weight:850;letter-spacing:-.045em;margin:24px 0 7px}.home-sub{font-size:13px;color:#667085}.race-card .home-sub{color:#d5e2ff}
+.targets-head{display:flex;align-items:end;justify-content:space-between;margin:22px 2px 10px}.targets-head h2{font-size:18px;margin:0}.targets-head span{font-size:11px;color:#98a2b3;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.targets{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.target{min-height:145px;padding:17px!important;border-radius:18px!important;background:#fff}
+.target-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800}.target-icon{font-size:18px}.target-number{font-size:29px;font-weight:850;letter-spacing:-.035em;margin-top:17px}.target-unit{font-size:12px;color:#667085}.target-detail{font-size:12px;color:#667085;margin-top:10px;line-height:1.35}
+.quick{margin-top:16px;padding:20px!important}.quick h2{font-size:20px;margin:0 0 4px}.quick p{margin:0}.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
+.quick-btn{border:1px solid #e1e6ef;border-radius:15px;padding:15px;min-height:88px;text-align:left;background:#f8fafc;color:#172033;font-weight:800;font-size:13px}.quick-btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.quick-btn .qicon{display:block;font-size:20px;margin-bottom:8px}.quick-btn small{display:block;margin-top:4px;opacity:.68;font-weight:600;font-size:10px}.quick-btn.primary small{opacity:.82}
+@media(max-width:650px){.home-top{grid-template-columns:1fr}.home-card{min-height:145px}.home-number{font-size:38px}.targets{gap:8px}.target{padding:13px!important;min-height:132px}.target-number{font-size:24px}.quick-grid{grid-template-columns:1fr}.quick-btn{min-height:66px}.quick-btn .qicon{display:inline;margin-right:7px}}
+</style>
+</head><body><div class="app">
 <header class="hero"><h1>TriFuel</h1><p>Race fueling + mobility, built around your training.</p></header>
 <nav class="nav" id="nav"></nav><main class="wrap">
 <section id="home" class="page"></section><section id="race" class="page hidden"></section>
@@ -42,9 +61,28 @@ drink:"Gatorade Endurance",drinkCarb:54,drinkSodium:520,drinkOz:20,gel:"Gel",gel
 let s=JSON.parse(localStorage.getItem("trifuel")||"null")||{...D};
 function go(x){location.hash=x}function nav(){let a=location.hash.slice(1)||"home",m=[["home","⌂","Home"],["race","⏱","Race"],["nutrition","⚡","Nutrition"],["mobility","🧘","Mobility"],["settings","⚙","Settings"]];document.getElementById("nav").innerHTML=m.map(x=>`<button class="${a==x[0]?"active":""}" onclick="go('${x[0]}')"><span>${x[1]}</span>${x[2]}</button>`).join("")}
 function calc(){return{bc:Math.round(s.carb*s.bike/60),bn:Math.round(s.sodium*s.bike/60),bf:Math.round(s.fluid*s.bike/60),rc:Math.round(s.carb*s.run/60),rn:Math.round(s.sodium*s.run/60)}}
-function renderHome(){let c=calc(),d=s.raceDate?Math.max(0,Math.ceil((new Date(s.raceDate+"T12:00:00")-new Date())/86400000)):null;document.getElementById("home").innerHTML=`<div class="grid"><div class="card"><span class="pill">Athlete</span><div class="big">${s.weight} lb</div><div class="muted">Race fueling profile</div></div><div class="card"><span class="pill">Countdown</span><div class="big">${d===null?"—":d+" days"}</div><div class="muted">${s.raceDate||"Set race date in Settings"}</div></div></div><div class="section grid3"><div class="card"><b>Bike</b><div class="big">${c.bc} g</div><div class="muted">carbs • ${c.bn} mg sodium</div></div><div class="card"><b>Run</b><div class="big">${c.rc} g</div><div class="muted">carbs • ${c.rn} mg sodium</div></div><div class="card"><b>Fluid</b><div class="big">${s.fluid}</div><div class="muted">oz/hour</div></div></div><div class="section card"><h2>Quick start</h2><div class="row"><button type="button" class="btn" onclick="go('race')">Race-day plan</button><button type="button" class="btn secondary" onclick="startMob('bike','dynamic')">Bike warm-up</button><button type="button" class="btn secondary" onclick="go('mobility')">Mobility plans</button></div></div><div class="section card"><h2>Focus of v2</h2><p class="muted">Nutrition, hydration, sodium, race-day timing, and mobility. Training plans and workouts are intentionally excluded because you already use a separate training app.</p></div>`}
+function renderHome(){
+let c=calc(),d=s.raceDate?Math.max(0,Math.ceil((new Date(s.raceDate+"T12:00:00")-new Date())/86400000)):null;
+document.getElementById("home").innerHTML=`<div class="home-dashboard">
+<div class="home-top">
+<div class="card home-card athlete-card"><div class="home-icon">🏅</div><div class="home-label">Athlete</div><div class="home-number">${s.weight} lb</div><div class="home-sub">Personalized race-fueling profile</div></div>
+<div class="card home-card race-card"><div class="home-icon">⏱️</div><div class="home-label">Race countdown</div><div class="home-number">${d===null?"—":d+" days"}</div><div class="home-sub">${s.raceDate||"Add your race date in Settings"}</div></div>
+</div>
+<div class="section">
+<div class="targets-head"><h2>Fueling targets</h2><span>race day</span></div>
+<div class="targets">
+<div class="target"><div class="target-head"><span>Bike</span><span class="target-icon">🚴</span></div><div class="target-number">${c.bc} g</div><div class="target-unit">carbohydrate / hour</div><div class="target-detail">${c.bn} mg sodium / hour</div></div>
+<div class="target"><div class="target-head"><span>Run</span><span class="target-icon">🏃</span></div><div class="target-number">${c.rc} g</div><div class="target-unit">carbohydrate / hour</div><div class="target-detail">${c.rn} mg sodium / hour</div></div>
+<div class="target"><div class="target-head"><span>Fluid</span><span class="target-icon">💧</span></div><div class="target-number">${s.fluid}</div><div class="target-unit">ounces / hour</div><div class="target-detail">Sip consistently; adjust to conditions</div></div>
+</div></div>
+<div class="card quick"><h2>Quick start</h2><p class="muted">Your most useful race-day tools.</p><div class="quick-grid">
+<button type="button" class="quick-btn primary" onclick="go('race')"><span class="qicon">🏁</span>Race-day plan<small>Fueling timeline</small></button>
+<button type="button" class="quick-btn" onclick="startMob('bike','dynamic')"><span class="qicon">🚴</span>Bike warm-up<small>Dynamic mobility</small></button>
+<button type="button" class="quick-btn" onclick="go('mobility')"><span class="qicon">🧘</span>Mobility plans<small>Swim • Bike • Run</small></button>
+</div></div></div>`;
+}
 function renderRace(){let c=calc();document.getElementById("race").innerHTML=`<div class="card"><span class="pill">Olympic triathlon</span><h2>Race-day fueling timeline</h2>${[
-["T−3:00","Breakfast",`~${s.breakfast} g carbs. Bagel + banana + honey/jam + electrolyte drink (500–1000 mg sodium).`],
+["T−3:00","Breakfast",`~${s.breakfast} g carbs. Bagel + 1/2 cup oatmeal + banana + honey/jam + electrolyte drink (500–1000 mg sodium).`],
 ["T−0:20","Pre-swim","1 gel (~25 g carbs) + water."],["Swim",`${s.swim} min`,"No fueling required."],
 ["Bike 0:15","Start fueling","Begin drink + 1 gel."],["Bike 0:40","Fuel",`1 gel + drink. Target ~${s.carb} g carbs/hr and ~${s.sodium} mg sodium/hr.`],
 ["Bike 1:05","Fuel","1 gel + drink."],["T2","Run setup","Water/sports drink as needed; don't force fluids."],
